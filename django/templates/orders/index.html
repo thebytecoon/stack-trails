@@ -1,0 +1,79 @@
+{% extends "master.html" %}
+
+{% block content %}
+<!-- Main Content -->
+    <main class="container mx-auto py-10">
+        <h1 class="text-2xl font-bold mb-6">Your Orders</h1>
+
+        <!-- Search and Filter Bar -->
+        <div class="bg-white shadow-md rounded-lg p-4 mb-6">
+            <div class="flex flex-col sm:flex-row gap-4">
+                <div class="flex-grow">
+                    <input type="text" placeholder="Search all orders" class="w-full px-4 py-2 border rounded-lg">
+                </div>
+                <div>
+                    <select class="px-4 py-2 border rounded-lg w-full">
+                        <option>Orders placed in the last 30 days</option>
+                        <option>Last 3 months</option>
+                        <option>Last 6 months</option>
+                        <option>2024</option>
+                        <option>2023</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Orders List -->
+        <div class="space-y-6">
+            <!-- Order 1 -->
+             {% for order in orders %}
+            <div class="bg-white shadow-md rounded-lg p-6">
+                <div class="flex flex-col sm:flex-row justify-between mb-4 pb-4 border-b">
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 text-sm mb-4 sm:mb-0">
+                        <div>
+                            <p class="font-semibold">ORDER PLACED</p>
+                            <p>{{ order.created }}</p>
+                        </div>
+                        <div>
+                            <p class="font-semibold">TOTAL</p>
+                            <p>${{ order.total }}</p>
+                        </div>
+                        <div>
+                            <p class="font-semibold">SHIP TO</p>
+                            <p>{{ order.first_name }} {{ order.last_name }}</p>
+                        </div>
+                        <div>
+                            <p class="font-semibold">ORDER# {{ order.id }}</p>
+                            <a href="#" class="text-blue-600 hover:underline">View order details</a>
+                        </div>
+                    </div>
+                    <div class="text-sm">
+                        <p class="font-semibold text-green-600">Delivered Apr 28</p>
+                        <p>Your package was delivered</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Order Item 1 -->
+                     {% for order_product in order.orderproduct_set.all %}
+                    <div class="flex flex-col sm:flex-row">
+                        <div class="sm:w-24 mb-4 sm:mb-0">
+                            <img src="https://via.placeholder.com/100" alt="{{ order_product.product.name }}" class="h-24 w-24 object-cover rounded-md">
+                        </div>
+                        <div class="flex-grow px-4">
+                            <h3 class="text-lg font-semibold">{{ order_product.product.name }}</h3>
+                            <p class="text-gray-600">Category: {{ order_product.product.category }}</p>
+                            <p class="text-blue-600">${{ order_product.final_price }}</p>
+                        </div>
+                        <div class="flex flex-col space-y-2 mt-4 sm:mt-0">
+                            <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Buy it again</button>
+                            <a href="{% url 'products.show' id=order_product.product_id %}" class="text-blue-600 hover:underline text-center">View your item</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+{% endblock  %}

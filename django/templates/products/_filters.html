@@ -1,0 +1,17 @@
+<!-- Category Filter -->
+<div class="mb-6">
+    <h3 class="font-semibold mb-3">{{ filters.categories.label }}</h3>
+    {{ filters.categories }}
+</div>
+<div class="mb-6">
+    <h3 class="font-semibold mb-3">{{ filters.brands.label }}</h3>
+    {{ filters.brands }}
+</div>
+<div class="mb-6">
+    <h3 class="font-semibold mb-3">{{ filters.price.label }}</h3>
+    {{ filters.price }}
+</div>
+
+{% if search_query %}
+    <input type="hidden" name="search" value="{{ search_query }}">
+{% endif %}

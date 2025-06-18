@@ -1,0 +1,36 @@
+{% with id=widget.attrs.id %}
+<div{% if id %} id="{{ id }}"{% endif %}{% if widget.attrs.class %} class="{{ widget.attrs.class }}"{% endif %}>
+    {% for group, options, index in widget.optgroups %}
+        {% if group %}
+            <div><label>{{ group }}</label>
+        {% endif %}
+        
+        {% for widget in options %}
+            <label for="{{ widget.attrs.id }}" class="flex items-center border border-gray-200 rounded-lg p-4 mb-4">
+                <input type="radio"
+                name="{{ widget.name }}"
+                value="{{ widget.value }}"
+                id="{{ widget.attrs.id }}"
+                hx-vals='{"shipping": "{{ widget.value }}"}'
+                {% include "django/forms/widgets/attrs.html" %}
+                {% if widget.checked %}checked{% endif %}>
+                <div class="ml-3 flex-1">
+                    <div class="flex justify-between">
+                        <span class="font-medium text-gray-900">{{ widget.label }}</span>
+                        {% if widget.price == 0 %}
+                        <span class="text-green-600 font-medium">Free</span>
+                        {% else %}
+                        <span class="font-medium">${{ widget.price }}</span>
+                        {% endif %}
+                    </div>
+                    <p class="text-sm text-gray-600">{{ widget.description }}</p>
+                </div>
+            </label>
+        {% endfor %}
+        
+        {% if group %}
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
+{% endwith %}

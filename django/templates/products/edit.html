@@ -1,0 +1,14 @@
+{% extends "master.html" %}
+
+{% block content %}
+<main class="container mx-auto py-10">
+    <h1 class="text-2xl font-bold mb-6">Edit New Product</h1>
+
+    <!-- Product Form -->
+    <div class="bg-white shadow-md rounded-lg p-6">
+        <form action="{% url "products.update" id=product.id %}" method="POST" enctype="multipart/form-data">
+            {% include "products/form.html" %}
+        </form>
+    </div>
+</main>
+{% endblock %}
