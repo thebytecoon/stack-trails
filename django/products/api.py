@@ -16,6 +16,7 @@ def search(request):
             | Q(brand__name__icontains=query)
             | Q(category__name__icontains=query)
         )
+        .wherePublished()
         .all()
         .order_by("-id")[:5]
     )
