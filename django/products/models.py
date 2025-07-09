@@ -12,7 +12,7 @@ class ProductQuerySet(models.QuerySet):
         return self.filter(published=1)
 
     def withAllFields(self):
-        return self.prefetch_related("category", "brand")
+        return self.prefetch_related("category", "brand", "features")
 
     def whereSearchable(self):
         return self.whereIsPurchasable()
@@ -57,7 +57,6 @@ class Product(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
     brand = models.ForeignKey(Brand, on_delete=models.DO_NOTHING)
     category = models.ForeignKey(Category, on_delete=models.DO_NOTHING)
-    color = models.ForeignKey(Color, on_delete=models.DO_NOTHING)
     image = models.CharField(max_length=255, null=True, blank=True)
     published = models.BooleanField(default=0)
     stock = models.PositiveSmallIntegerField(null=True)
@@ -130,3 +129,14 @@ class Reviews(models.Model):
 
     def __str__(self):
         return f"Review by {self.user.username} for {self.product.title}"
+
+
+class ProductFeatures(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="features")
+    description = models.CharField(max_length=255)
+
+    class Meta:
+        db_table = "product_features"
+
+    def __str__(self):
+        return f"{self.feature_name}: {self.feature_value} for {self.product.name}"

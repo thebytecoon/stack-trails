@@ -32,81 +32,24 @@
 
             <div class="text-3xl font-bold text-store-blue mb-6">${{ product.price }}</div>
 
-            <div class="mb-6">
-                <h3 class="font-semibold mb-3">Color</h3>
-                <div class="flex space-x-2">
-                    <button class="w-12 h-12 rounded-full bg-gray-800 border-2 border-store-blue"></button>
-                    <button class="w-12 h-12 rounded-full bg-blue-200 border-2 border-gray-300"></button>
-                    <button class="w-12 h-12 rounded-full bg-purple-200 border-2 border-gray-300"></button>
-                    <button class="w-12 h-12 rounded-full bg-yellow-100 border-2 border-gray-300"></button>
-                </div>
-            </div>
-
-            <div class="mb-6">
-                <h3 class="font-semibold mb-3">Storage</h3>
-                <div class="grid grid-cols-3 gap-3">
-                    <button class="border-2 border-store-blue bg-store-blue text-white px-4 py-2 rounded-lg text-sm font-medium">256GB</button>
-                    <button class="border-2 border-gray-300 px-4 py-2 rounded-lg text-sm font-medium hover:border-store-blue">512GB</button>
-                    <button class="border-2 border-gray-300 px-4 py-2 rounded-lg text-sm font-medium hover:border-store-blue">1TB</button>
-                </div>
-            </div>
-
-            <div class="mb-8">
-                <h3 class="font-semibold mb-3">Quantity</h3>
-                <div class="flex items-center space-x-3">
-                    <button class="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center">-</button>
-                    <span class="text-lg font-medium">1</span>
-                    <button class="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center">+</button>
-                </div>
-            </div>
-
-            <div class="flex space-x-4 mb-8">
-                <button class="flex-1 bg-store-blue text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium">
-                    Add to Cart
-                </button>
-                <button class="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                    </svg>
-                </button>
-            </div>
+            {% include "products/_product_details.html" %}
 
             <!-- Product Features -->
-            <div class="border-t border-gray-200 pt-6">
-                <h3 class="font-semibold mb-4">Key Features</h3>
-                <ul class="space-y-2 text-gray-600">
-                    <li class="flex items-center">
-                        <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                        A17 Pro chip with 6-core GPU
-                    </li>
-                    <li class="flex items-center">
-                        <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                        Pro camera system with 48MP Main camera
-                    </li>
-                    <li class="flex items-center">
-                        <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                        6.7-inch Super Retina XDR display
-                    </li>
-                    <li class="flex items-center">
-                        <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                        Up to 29 hours video playback
-                    </li>
-                    <li class="flex items-center">
-                        <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                        USB-C connector
-                    </li>
-                </ul>
-            </div>
+             {% if product.features.count > 0 %}
+                <div class="border-t border-gray-200 pt-6">
+                    <h3 class="font-semibold mb-4">Key Features</h3>
+                    <ul class="space-y-2 text-gray-600">
+                        {% for key_feature in product.features.all %}
+                            <li class="flex items-center">
+                                <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                {{ key_feature.description }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
         </div>
     </div>
 
@@ -195,7 +138,9 @@
                     <p class="text-gray-600 text-sm mb-3">Premium protection for your device</p>
                     <div class="flex justify-between items-center">
                         <span class="text-xl font-bold text-store-blue">$59</span>
-                        <button class="bg-store-dark text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors text-sm">
+                        <button 
+                            class="bg-store-dark text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors text-sm"
+                        >
                             Add to Cart
                         </button>
                     </div>

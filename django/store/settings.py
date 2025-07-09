@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     "payments",
     "addresses",
     "user_profile",
+    'product_storage',
 ]
 
 MIDDLEWARE = [

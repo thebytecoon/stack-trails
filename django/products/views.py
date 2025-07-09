@@ -1,6 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
-from django.http import HttpResponse
 from .forms import ProductFilters, ProductForm
 from .models import Product
 from django.db.models import Q
@@ -8,6 +7,8 @@ from django.views.decorators.http import require_GET, require_POST
 import json
 from django.contrib import messages
 from django.db.models import Count, Q
+from colors.models import Color
+from product_storage.models import ProductStorage
 
 
 @require_GET
@@ -74,7 +75,27 @@ def show(request, id):
     query = Product.objects.wherePublished().withAllFields()
     product = get_object_or_404(query, slug=id)
 
-    return render(request, "products/show.html", {"product": product})
+    available_colors = Color.objects.all()
+    available_storage = ProductStorage.objects.all()
+    selected_color = None
+    selected_storage = None
+
+    if request.GET.get("color"):
+        selected_color = int(request.GET.get("color"))
+    
+    if request.GET.get("storage"):
+        selected_storage = int(request.GET.get("storage"))
+
+    can_add = selected_color is not None and selected_storage is not None
+
+    return render(request, "products/show.html", {
+        "product": product,
+        "available_colors": available_colors,
+        "selected_color": selected_color,
+        "available_storage": available_storage,
+        "selected_storage": selected_storage,
+        "can_add": can_add,
+    })
 
 
 @require_GET

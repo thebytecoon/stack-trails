@@ -28,7 +28,7 @@
                         </div>
                         <div class="flex-1">
                             <h3 class="font-semibold text-sm">{{ cart.product.name }}</h3>
-                            <p class="text-gray-600 text-sm">Titanium, 256GB</p>
+                            <p class="text-gray-600 text-sm">{{ cart.color.name }}, {{ cart.storage.name }}</p>
                             <div class="flex items-center space-x-2 mt-2 relative">
                                 <button hx-post="{% url 'carts.sub' cart.product_id %}"
                                         hx-target="#cart-offcanvas"
