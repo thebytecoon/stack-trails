@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_POST, require_GET
 from django.http import HttpResponseBadRequest
 from .models import Cart
 from django.contrib import messages
@@ -7,7 +7,7 @@ from .utils import get_cart
 from .enums import CartDisplayEnum
 
 
-@require_http_methods(["GET"])
+@require_GET
 def index(request):
     cart = get_cart(request)
 
@@ -20,7 +20,7 @@ def index(request):
     return render(request, "carts/index.html", {"carts": carts, "total": total})
 
 
-@require_http_methods(["POST"])
+@require_POST
 def store(request):
     if not request.POST.get("product_id"):
         return HttpResponseBadRequest
@@ -44,7 +44,7 @@ def store(request):
     return redirect(request.META.get("HTTP_REFERER"))
 
 
-@require_http_methods(["POST"])
+@require_POST
 def destroy(request, product_id):
     if not request.POST.get("display"):
         return HttpResponseBadRequest("Display parameter is required")
@@ -56,8 +56,17 @@ def destroy(request, product_id):
 
     cart = get_cart(request)
 
+    color_id = None
+    storage_id = None
+
+    if request.POST.get("color"):
+        color_id = int(request.POST.get("color"))
+
+    if request.POST.get("storage"):
+        storage_id = int(request.POST.get("storage"))
+
     try:
-        cart.remove_item(product_id, 9999999)
+        cart.remove_item(product_id, 9999999, color_id, storage_id)
     except ValueError as e:
         pass
 
@@ -66,7 +75,7 @@ def destroy(request, product_id):
     return render(request, display.getView(), {"carts": carts})
 
 
-@require_http_methods(["POST"])
+@require_POST
 def add(request, product_id):
     if not request.POST.get("display"):
         return HttpResponseBadRequest("Display parameter is required")
@@ -78,8 +87,21 @@ def add(request, product_id):
 
     cart = get_cart(request)
 
+    quantity = None
+    color_id = None
+    storage_id = None
+
+    if request.POST.get("quantity"):
+        quantity = int(request.POST.get("quantity"))
+
+    if request.POST.get("color"):
+        color_id = int(request.POST.get("color"))
+
+    if request.POST.get("storage"):
+        storage_id = int(request.POST.get("storage"))
+
     try:
-        cart.add_item(product_id)
+        cart.add_item(product_id, quantity, color_id, storage_id)
     except ValueError as e:
         pass
 
@@ -92,7 +114,7 @@ def add(request, product_id):
     return render(request, display.getView(), {"carts": carts, "total": total})
 
 
-@require_http_methods(["POST"])
+@require_POST
 def sub(request, product_id):
     if not request.POST.get("display"):
         return HttpResponseBadRequest("Display parameter is required")
@@ -102,9 +124,22 @@ def sub(request, product_id):
     except ValueError:
         return HttpResponseBadRequest("Invalid display type")
 
+    quantity = None
+    color_id = None
+    storage_id = None
+
+    if request.POST.get("quantity"):
+        quantity = int(request.POST.get("quantity"))
+
+    if request.POST.get("color"):
+        color_id = int(request.POST.get("color"))
+
+    if request.POST.get("storage"):
+        storage_id = int(request.POST.get("storage"))
+
     cart = get_cart(request)
     try:
-        cart.remove_item(product_id)
+        cart.remove_item(product_id, quantity, color_id, storage_id)
     except ValueError as e:
         pass
 

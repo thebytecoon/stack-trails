@@ -33,16 +33,35 @@
     <div class="mb-8">
         <h3 class="font-semibold mb-3">Quantity</h3>
         <div class="flex items-center space-x-3">
-            <button class="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center">-</button>
-            <span class="text-lg font-medium">1</span>
-            <button class="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center">+</button>
+            <button 
+                class="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center"
+                hx-get="{% url 'products.show' id=product.slug %}{% querystring quantity=quantity|add:-1 %}"
+                hx-target="#product-details"
+                hx-swap="outerHTML"
+                {% if quantity == 1 %} disabled {% endif %}
+            >-</button>
+            <span class="text-lg font-medium">{{ quantity }}</span>
+            <button 
+                class="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center"
+                hx-get="{% url 'products.show' id=product.slug %}{% querystring quantity=quantity|add:1 %}"
+                hx-target="#product-details"
+                hx-swap="outerHTML"
+                {% if quantity == product.stock %}
+                disabled
+                title="Maximum stock reached"
+                {% endif %}
+            >+</button>
         </div>
     </div>
 
+    
+
     <div class="flex space-x-4 mb-8">
         <button 
+            hx-post="{% url 'carts.add' product.id %}"
+            hx-vals='{"display": "cart", "color": {{ selected_color }}, "storage": {{ selected_storage }}, "quantity": {{ quantity }} }'
             class="disabled:border-gray-200 disabled:bg-gray-100 disabled:text-gray-500 flex-1 bg-store-blue text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium"
-            {% if not can_add %} disabled {% endif %}
+            {% if not can_add_to_cart %} disabled {% endif %}
             >
             Add to Cart
         </button>

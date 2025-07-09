@@ -86,7 +86,16 @@ def show(request, id):
     if request.GET.get("storage"):
         selected_storage = int(request.GET.get("storage"))
 
-    can_add = selected_color is not None and selected_storage is not None
+    if request.GET.get("quantity"):
+        quantity = int(request.GET.get("quantity"))
+    else:
+        quantity = 1
+
+    can_add_to_cart = selected_color is not None and selected_storage is not None and quantity > 0
+
+    if product.stock < quantity:
+        can_add_to_cart = False
+        quantity = product.stockç
 
     return render(request, "products/show.html", {
         "product": product,
@@ -94,7 +103,8 @@ def show(request, id):
         "selected_color": selected_color,
         "available_storage": available_storage,
         "selected_storage": selected_storage,
-        "can_add": can_add,
+        "can_add_to_cart": can_add_to_cart,
+        "quantity": quantity,
     })
 
 
