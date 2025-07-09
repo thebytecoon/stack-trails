@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechStore - Premium Electronics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .htmx-indicator {
+            display:none;
+        }
+        .htmx-request .htmx-indicator{
+            display:inline;
+        }
+        .htmx-request.htmx-indicator{
+            display:inline;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'store-dark': '#0c0c0c',
+                        'store-gray': '#1a1a1a',
+                        'store-blue': '#0066ff',
+                        'store-light-gray': '#f5f5f5'
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>
+</head>
+<body class="bg-white text-gray-900" hx-headers='{"X-CSRFToken": "{{ csrf_token() }}"}'>
+    @include('partials.header')
+
+    {{-- @if ($messages)
+        @foreach($messages as $message)
+            <div class="p-4 mb-4 rounded-lg text-center
+                {% if message.tags == "error" %}
+                bg-red-50 dark:bg-gray-800 dark:text-red-400 text-red-800 border-red-300 dark:border-red-800
+                {% else %}
+                text-green-800 border border-green-300 bg-green-50 dark:bg-gray-800 dark:text-green-400 dark:border-green-800
+                {% endif %}" 
+            role="alert">
+            <div>
+                {{ $message }}
+            </div>
+            </div>
+        @endforeach
+    @endif --}}
+
+    @yield('content')
+
+    @yield('bottom')
+
+    @include('partials.footer')
+
+    @section('scripts')
+        <script>
+            let searchTimeout;
+
+            async function searchProducts(query) {
+                try {
+                    const response = await fetch(`{% url 'api.products.search' %}?q=${encodeURIComponent(query)}`);
+                    
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    
+                    return await response.json();
+                } catch (error) {
+                    console.error('Error fetching products:', error);
+                    return [];
+                }
+            }
+
+            function handleSearch(query) {
+                // Clear previous timeout
+                clearTimeout(searchTimeout);
+                
+                // Set new timeout for debouncing
+                searchTimeout = setTimeout(async () => {
+                    const searchResults = document.getElementById('search-results');
+                    const searchContent = document.getElementById('search-content');
+                    const searchLoading = document.getElementById('search-loading');
+                    const searchEmpty = document.getElementById('search-empty');
+
+                    if (!query.trim()) {
+                        searchResults.classList.add('hidden');
+                        return;
+                    }
+
+                    // Show loading
+                    searchResults.classList.remove('hidden');
+                    searchLoading.classList.remove('hidden');
+                    searchContent.innerHTML = '';
+                    searchEmpty.classList.add('hidden');
+
+                    try {
+                        const products = await searchProducts(query);
+                        
+                        // Hide loading
+                        searchLoading.classList.add('hidden');
+
+                        if (products.length === 0) {
+                            searchEmpty.classList.remove('hidden');
+                        } else {
+                            // Populate results
+                            searchContent.innerHTML = products.map(product => `
+                                <a href="${product.url}">
+                                    <div class="flex items-center space-x-3 p-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0" onclick="selectProduct(${product.id})">
+                                        <div class="bg-gray-100 rounded-lg w-12 h-12 flex items-center justify-center text-xl">
+                                            <img src="${product.image}" alt="${product.name}" class="w-8 h-8 object-cover">
+                                        </div>
+                                        <div class="flex-1">
+                                            <h4 class="font-semibold text-sm">${product.name}</h4>
+                                            <p class="text-gray-600 text-xs">${product.category}</p>
+                                        </div>
+                                        <div class="text-right">
+                                            <p class="font-bold text-store-blue">$${product.price}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            `).join('');
+                        }
+                    } catch (error) {
+                        console.error('Search error:', error);
+                        searchLoading.classList.add('hidden');
+                        searchEmpty.classList.remove('hidden');
+                    }
+                }, 300); // 300ms debounce
+            }
+
+            function showSearchResults() {
+                const query = document.getElementById('search-input').value;
+                if (query.trim()) {
+                    document.getElementById('search-results').classList.remove('hidden');
+                }
+            }
+
+            function hideSearchResults() {
+                // Add delay to allow clicking on results
+                setTimeout(() => {
+                    document.getElementById('search-results').classList.add('hidden');
+                }, 200);
+            }
+
+            function selectProduct(productId) {
+                console.log('Selected product:', productId);
+                // Add your product selection logic here
+                document.getElementById('search-input').value = '';
+                document.getElementById('search-results').classList.add('hidden');
+            }
+
+            function toggleCart() {
+                const overlay = document.getElementById('cart-overlay');
+                const offcanvas = document.getElementById('cart-offcanvas');
+                
+                if (overlay.classList.contains('hidden')) {
+                    // Show cart
+                    overlay.classList.remove('hidden');
+                    setTimeout(() => {
+                        offcanvas.classList.remove('translate-x-full');
+                    }, 10);
+                } else {
+                    // Hide cart
+                    offcanvas.classList.add('translate-x-full');
+                    setTimeout(() => {
+                        overlay.classList.add('hidden');
+                    }, 300);
+                }
+            }
+
+            // Close search results when clicking outside
+            document.addEventListener('click', function(event) {
+                const searchContainer = event.target.closest('.relative');
+                const searchResults = document.getElementById('search-results');
+                
+                if (!searchContainer && !searchResults.classList.contains('hidden')) {
+                    searchResults.classList.add('hidden');
+                }
+            });
+        </script>
+    @show
+</body>
+</html>

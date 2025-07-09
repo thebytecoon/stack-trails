@@ -1,0 +1,99 @@
+@extends("master")
+
+@section('content')
+    <!-- Hero Section -->
+<section class="bg-gradient-to-br from-store-dark to-store-gray text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h1 class="text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+                        Premium Electronics
+                        <span class="text-store-blue">Redefined</span>
+                    </h1>
+                    <p class="text-xl text-gray-300 mb-8 leading-relaxed">
+                        Discover cutting-edge technology with unmatched quality. From smartphones to smart homes, we bring you the future today.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <button class="bg-store-blue text-white px-8 py-4 rounded-lg hover:bg-blue-700 transition-all transform hover:scale-105 font-medium">
+                            Shop Now
+                        </button>
+                        <button class="border border-white text-white px-8 py-4 rounded-lg hover:bg-white hover:text-store-dark transition-all">
+                            View Catalog
+                        </button>
+                    </div>
+                </div>
+                <div class="relative">
+                    <div class="bg-gradient-to-br from-store-blue to-blue-600 rounded-3xl p-8 transform rotate-3 hover:rotate-0 transition-transform duration-300">
+                        <div class="bg-white rounded-2xl p-6 text-store-dark">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="font-bold text-lg">Latest iPhone 15 Pro</h3>
+                                <span class="text-2xl">📱</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">Experience innovation at its finest</p>
+                            <div class="text-3xl font-bold text-store-blue">$999</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories -->
+    <section class="py-20 bg-store-light-gray">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-12">Shop by Category</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="bg-white rounded-2xl p-6 text-center hover:shadow-lg transition-shadow cursor-pointer group">
+                    <div class="text-4xl mb-4 group-hover:scale-110 transition-transform">📱</div>
+                    <h3 class="font-semibold mb-2">Smartphones</h3>
+                    <p class="text-gray-600 text-sm">Latest models</p>
+                </div>
+                <div class="bg-white rounded-2xl p-6 text-center hover:shadow-lg transition-shadow cursor-pointer group">
+                    <div class="text-4xl mb-4 group-hover:scale-110 transition-transform">💻</div>
+                    <h3 class="font-semibold mb-2">Laptops</h3>
+                    <p class="text-gray-600 text-sm">High performance</p>
+                </div>
+                <div class="bg-white rounded-2xl p-6 text-center hover:shadow-lg transition-shadow cursor-pointer group">
+                    <div class="text-4xl mb-4 group-hover:scale-110 transition-transform">🎧</div>
+                    <h3 class="font-semibold mb-2">Audio</h3>
+                    <p class="text-gray-600 text-sm">Premium sound</p>
+                </div>
+                <div class="bg-white rounded-2xl p-6 text-center hover:shadow-lg transition-shadow cursor-pointer group">
+                    <div class="text-4xl mb-4 group-hover:scale-110 transition-transform">🏠</div>
+                    <h3 class="font-semibold mb-2">Smart Home</h3>
+                    <p class="text-gray-600 text-sm">Connected living</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center mb-12">
+                <h2 class="text-3xl font-bold">Featured Products</h2>
+                <a href="/products" class="text-store-blue hover:underline font-medium">View All</a>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                @foreach($products as $product)
+                    @include('products.product', ['product' => $product])
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="bg-store-dark text-white py-20">
+        <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl font-bold mb-4">Stay Updated</h2>
+            <p class="text-xl text-gray-300 mb-8">Get notified about new products, exclusive deals, and tech innovations</p>
+            <div class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+                <input type="email" placeholder="Enter your email" class="flex-1 px-4 py-3 rounded-lg bg-white text-store-dark placeholder-gray-500">
+                <button class="bg-store-blue text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                    Subscribe
+                </button>
+            </div>
+        </div>
+    </section>
+@endsection
+
