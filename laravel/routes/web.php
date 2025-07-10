@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserOrdersController;
@@ -18,6 +19,15 @@ Route::post('login', [LoginController::class, 'postLogin']);
 Route::get('products/search', ProductSearchController::class)
     ->name('api.products.search');
 Route::resource('products', ProductsController::class);
+
+Route::post('carts/add/{product_id}', [CartController::class, 'add'])
+    ->name('carts.add');
+
+Route::post('carts/sub/{product_id}', [CartController::class, 'sub'])
+    ->name('carts.sub');
+
+Route::delete('carts/{product_id}', [CartController::class, 'destroy'])
+    ->name('carts.destroy');
 
 Route::group(['middleware' => 'auth', 'prefix' => 'user'], function () {
     Route::resource('orders', UserOrdersController::class)

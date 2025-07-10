@@ -11,7 +11,7 @@
         <div class="flex justify-between items-center">
             <span class="text-2xl font-bold text-store-blue">${{ $product->price }}</span>
             <button 
-                hx-post="{% url 'carts.add' product.id %}"
+                hx-post="{{ route('carts.add', [$product->id]) }}"
                 hx-target="#cart-offcanvas"
                 hx-swap="outerHTML"
                 hx-vals='{"display": "product_list"}'
