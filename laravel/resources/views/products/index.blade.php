@@ -1,14 +1,14 @@
 @extends("master")
 
 @section('content')
-<form method="get" action="{% url 'products.index' %}" id="filter-form">
+<form method="get" action="{{ route('products.index') }}" id="filter-form">
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="lg:grid lg:grid-cols-4 lg:gap-8">
         <!-- Filters Sidebar -->
         <div class="hidden lg:block">
             <div class="bg-white rounded-2xl p-6 shadow-sm">
                 <h2 class="text-lg font-bold mb-6">Filters</h2>
-                {{-- {% include 'products/_filters.html' with filters=filters %} --}}
+                @include("products._filters")
 
                 <button type="button" onclick="clearAllFilters()" class="w-full text-sm text-store-blue hover:underline">
                     Clear all filters

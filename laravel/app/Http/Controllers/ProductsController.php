@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Brand;
+use App\Models\Category;
 use App\Models\Color;
 use App\Models\Product;
 use App\Models\ProductStorage;
@@ -14,15 +16,45 @@ class ProductsController extends Controller
         $query = Product::query()
             ->whereIsSearchable()
             ->when($request->has('categories'), function ($query) use ($request) {
-                $query->whereIn('category_id', $request->input('categories'));
+                $query->whereHas('category', function ($q) use ($request) {
+                    $q->whereIn('name', $request->array('categories', []));
+                });
+            })
+            ->when($request->has('brands'), function ($query) use ($request) {
+                $query->whereHas('brand', function ($q) use ($request) {
+                    $q->whereIn('name', $request->array('brands', []));
+                });
             })
             ->orderByDesc('id');
 
-
         $products = $query->paginate(15);
+
+        $categories = Category::withCount([
+            'products' => function ($query) {
+                $query->whereIsSearchable()
+                    ->when(request()->has('brands'), function ($query) {
+                        $query->whereHas('brand', function ($q) {
+                            $q->whereIn('name', request()->array('brands', []));
+                        });
+                    });
+            }
+        ])->get();
+
+        $brands = Brand::withCount([
+            'products' => function ($query) {
+                $query->whereIsSearchable()
+                    ->when(request()->has('categories'), function ($query) {
+                        $query->whereHas('category', function ($q) {
+                            $q->whereIn('name', request()->array('categories', []));
+                        });
+                    });
+            }
+        ])->get();
 
         return view('products.index', [
             'products' => $products,
+            'categories' => $categories,
+            'brands' => $brands,
         ]);
     }
 

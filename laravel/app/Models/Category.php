@@ -9,6 +9,11 @@ class Category extends Model
 {
     use HasSlug;
 
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+
     public function sluggable(): array
     {
         return [
