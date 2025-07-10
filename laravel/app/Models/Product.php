@@ -27,10 +27,30 @@ class Product extends Model
         return $this->belongsTo(Brand::class);
     }
 
-    public function scopeWherePurchasable(Builder $query): Builder
+    public function features()
     {
-        return $query->where('published', true)
+        return $this->hasMany(ProductFeature::class);
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function scopeWhereIsPurchasable(Builder $query): Builder
+    {
+        return $query->whereIsSearchable()
             ->where('stock', '>', 0);
+    }
+
+    public function scopeWhereIsSearchable(Builder $query): Builder
+    {
+        return $query->where('published', true);
+    }
+
+    public function scopeWhereIsFeatured(Builder $query, bool $featured = true) : Builder
+    {
+        return $query->where('featured', $featured);
     }
 
     public function image_url($width = 600, $height = 600)

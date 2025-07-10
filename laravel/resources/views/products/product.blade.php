@@ -4,7 +4,7 @@
             alt="{{ $product->name }}" class="object-cover rounded-lg">
     </div>
     <div class="p-6">
-        <a href="{% url 'products.show' product.slug %}">
+        <a href="{{ route('products.show', [$product->slug]) }}">
             <h3 class="font-bold text-xl mb-2">{{ $product->name }}</h3>
         </a>
         <p class="text-gray-600 mb-4">{{ $product->short_description }}</p>

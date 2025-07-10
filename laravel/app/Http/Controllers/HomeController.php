@@ -10,8 +10,8 @@ class HomeController extends Controller
     public function __invoke()
     {
         $products = Product::query()
-            ->wherePurchasable()
-            ->whereFeatured(true)
+            ->whereIsSearchable()
+            ->whereIsFeatured(true)
             ->inRandomOrder()
             ->take(3)
             ->get();

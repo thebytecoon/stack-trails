@@ -2,13 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Color;
+use App\Models\Product;
+use App\Models\ProductStorage;
 use Illuminate\Http\Request;
 
 class ProductsController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $query = Product::query()
+            ->when($request->has('categories'), function ($query) use ($request) {
+                $query->whereIn('category_id', $request->input('categories'));
+            });
+
+
+        $products = $query->paginate(15);
+
+        return view('products.index', [
+            'products' => $products,
+        ]);
     }
 
     public function create()
@@ -21,9 +34,53 @@ class ProductsController extends Controller
         //
     }
 
-    public function show(string $id)
+    public function show(string $slug, Request $request)
     {
-        //
+        $product = Product::whereIsSearchable()
+            ->where('slug', $slug)
+            ->firstOrFail();
+
+        $available_colors = Color::all();
+        $available_storage = ProductStorage::all();
+
+        $selected_color = null;
+        if ($request->has('color')) {
+            $selected_color = $request->integer('color');
+        }
+
+        $selected_storage = null;
+        if ($request->has('storage')) {
+            $selected_storage = $request->integer('storage');
+        }
+
+        $quantity = 1;
+        if ($request->has('quantity') && $request->integer('quantity') > 0) {
+            $quantity = $request->integer('quantity');
+        }
+
+        $can_add_to_cart = (
+            $selected_color &&
+            $selected_storage &&
+            $quantity > 0 &&
+            $quantity <= $product->stock
+        );
+
+        $related_products = Product::where('category_id', $product->category_id)
+            ->where('id', '!=', $product->id)
+            ->inRandomOrder()
+            ->take(4)
+            ->get();
+
+        return view('products.show', [
+            'product' => $product,
+            'available_colors' => $available_colors,
+            'available_storage' => $available_storage,
+            'selected_color' => $selected_color,
+            'selected_storage' => $selected_storage,
+            'quantity' => $quantity,
+            'can_add_to_cart' => $can_add_to_cart,
+            'related_products' => $related_products,
+        ]);
     }
 
     public function edit(string $id)
