@@ -8,7 +8,7 @@
             <div class="px-6 py-4 border-b border-gray-200">
                 <div class="flex justify-between items-center">
                     <h1 class="text-2xl font-semibold text-gray-900">Your Addresses</h1>
-                    <button hx-get="{% url 'user.addresses.create' %}" hx-target="#modal" hx-swap="innerHTML"
+                    <button hx-get="{{ route('user.addresses.create') }}" hx-target="#modal" hx-swap="innerHTML"
                         class="bg-store-blue text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
                         Add Address
                     </button>
@@ -42,13 +42,9 @@
 
 @section('scripts')
     @parent
-    <script>
+    {{-- <script>
         function hideAddressModal() {
             document.getElementById('address-modal').remove();
-        }
-        // Address management
-        {
-            % comment %
         }
 
         function showAddAddressModal() {
@@ -95,8 +91,5 @@
                 hideAddressModal();
             }
         });
-        {
-            % endcomment %
-        }
-    </script>
+    </script> --}}
 @endsection

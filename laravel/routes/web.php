@@ -26,7 +26,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'user'], function () {
 
     Route::resource('addresses', UserAddressesController::class)
         ->names('user.addresses')
-        ->only(['index']);
+        ->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
+    
+    Route::patch('addresses/{id}/set-default', [UserAddressesController::class, 'setDefault'])
+        ->name('user.addresses.set_default');
 
     Route::resource('payment-methods', UserPaymentMethodsController::class)
         ->names('user.payment-methods')

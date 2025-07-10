@@ -28,20 +28,20 @@
                 <div class="mt-4 flex space-x-2">
                     @if (!$address->default)
                         <button
-                            hx-post="{% url 'user.addresses.default' $address->id %}"
+                            hx-patch="{{ route('user.addresses.set_default', [$address->id]) }}"
                             hx-target="#addresses-list"
                             hx-swap="outerHTML"
                             class="text-sm text-store-blue hover:text-blue-700">Set as Default</button>
                         <span class="text-gray-300">|</span>
                     @endif
                     <button
-                        hx-get="{% url 'user.addresses.edit' $address->id %}"
+                        hx-get="{{ route('user.addresses.edit', [$address->id]) }}"
                         hx-target="#modal"
                         hx-swap="innerHTML"
                         class="text-sm text-store-blue hover:text-blue-700">Edit</button>
                     <span class="text-gray-300">|</span>
                     <button
-                        hx-post="{% url 'user.addresses.delete' $address->id %}"
+                        hx-delete="{{ route('user.addresses.destroy', [$address->id]) }}"
                         hx-target="#addresses-list"
                         hx-swap="outerHTML"
                         hx-confirm="Are you sure you want to remove this address?"
@@ -52,7 +52,7 @@
 
         <!-- Add New Address Card -->
         <div 
-            hx-get="{% url 'user.addresses.create' %}"
+            hx-get="{{ route('user.addresses.create') }}"
             hx-target="#modal"
             hx-swap="innerHTML"
             hx-trigger="click"

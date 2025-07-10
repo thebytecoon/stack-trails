@@ -32,7 +32,7 @@
     </script>
     <script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>
 </head>
-<body class="bg-white text-gray-900" hx-headers='{"X-CSRFToken": "{{ csrf_token() }}"}'>
+<body class="bg-white text-gray-900" hx-headers='{"X-CSRF-TOKEN": "{{ csrf_token() }}"}'>
     @include('partials.header')
 
     {{-- @if ($messages)
