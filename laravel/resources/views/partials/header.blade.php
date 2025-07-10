@@ -69,15 +69,15 @@
                 @auth
                     <div class="relative">
                         <button id="user-menu-button" class="flex items-center space-x-2 focus:outline-none">
-                            <img src="{{ user.profile.avatar.url }}" alt="{{ user.username }}" class="w-8 h-8 rounded-full">
-                            <span class="hidden md:inline-block text-sm text-gray-700">{{ user.username }}</span>
+                            <img src="{{ auth()->user()->avatar }}" alt="{{ auth()->user()->name }}" class="w-8 h-8 rounded-full">
+                            <span class="hidden md:inline-block text-sm text-gray-700">{{ auth()->user()->name }}</span>
                         </button>
                         <div id="user-menu" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg hidden">
                             <a href="" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
                             <a href="{% url 'user.orders.index' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Orders</a>
                             <a href="{% url 'user.addresses.index' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Addresses</a>
                             <a href="{% url 'user.payment-methods.index' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Payment Options</a>
-                            <a href="{% url 'logout' %}" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50">Logout</a>
+                            <a href="{{ route('logout') }}" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50">Logout</a>
                         </div>
                     <script>
                         document.getElementById('user-menu-button').addEventListener('click', function() {
@@ -94,7 +94,7 @@
                     </script>
                 </div>
                 @else
-                <a href="{% url 'login' %}" class="bg-store-blue text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                <a href="{{ route('login') }}" class="bg-store-blue text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
                     Sign In
                 </a>
                 @endauth
