@@ -6,6 +6,7 @@ use App\Models\Address;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Color;
+use App\Models\PaymentMethod;
 use App\Models\Product;
 use App\Models\ProductStorage;
 use App\Models\ShippingOption;
@@ -199,8 +200,7 @@ class DatabaseSeeder extends Seeder
             ]);
 
             $this->command->info('Creating addresses...');
-            Address::create([
-                'user_id' => $user->id,
+            $user->addresses()->create([
                 'name' => 'Home',
                 'names' => 'John Doe',
                 'address_line_1' => '123 Main Street',
@@ -212,8 +212,7 @@ class DatabaseSeeder extends Seeder
                 'default' => true,
             ]);
 
-            Address::create([
-                'user_id' => $user->id,
+            $user->addresses()->create([
                 'name' => 'Work',
                 'names' => 'John Doe',
                 'address_line_1' => '456 Business Ave',
@@ -223,6 +222,15 @@ class DatabaseSeeder extends Seeder
                 'postal_code' => '10005',
                 'phone_number' => '(555) 987-6543',
                 'default' => false,
+            ]);
+
+            $this->command->info("Creating payment methods...");
+            $user->payment_methods()->create([
+                "type" => "Visa",
+                "card_number" => "4387",
+                "cardholder_name" => "John Doe",
+                "expiry_date" => "2026-12-31",
+                "code" => "123",
             ]);
 
             $this->command->info('Creating colors...');

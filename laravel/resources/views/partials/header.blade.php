@@ -74,7 +74,7 @@
                         </button>
                         <div id="user-menu" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg hidden">
                             <a href="" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
-                            <a href="{% url 'user.orders.index' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Orders</a>
+                            <a href="{{ route('user.orders.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Orders</a>
                             <a href="{% url 'user.addresses.index' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Addresses</a>
                             <a href="{% url 'user.payment-methods.index' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Payment Options</a>
                             <a href="{{ route('logout') }}" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50">Logout</a>

@@ -26,6 +26,7 @@ class ProductSearchController extends Controller
                     ->orWhereRelation('category', 'name', 'like', '%' . $q . '%')
                     ->orWhereRelation('brand', 'name', 'like', '%' . $q . '%');
             })
+            ->orderByDesc('id')
             ->take(5)
             ->get();
 

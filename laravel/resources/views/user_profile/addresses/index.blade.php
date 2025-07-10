@@ -1,0 +1,102 @@
+@extends('user_profile.master')
+
+@section('profile_content')
+    <!-- Addresses Content -->
+    <div class="lg:col-span-3">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+            <!-- Header -->
+            <div class="px-6 py-4 border-b border-gray-200">
+                <div class="flex justify-between items-center">
+                    <h1 class="text-2xl font-semibold text-gray-900">Your Addresses</h1>
+                    <button hx-get="{% url 'user.addresses.create' %}" hx-target="#modal" hx-swap="innerHTML"
+                        class="bg-store-blue text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                        Add Address
+                    </button>
+                </div>
+            </div>
+
+            @include('user_profile.addresses._list')
+
+            <!-- Address Management Info -->
+            <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">
+                <div class="flex items-start space-x-3">
+                    <svg class="w-5 h-5 text-blue-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <div>
+                        <h4 class="font-medium text-gray-900">Address Book Tips</h4>
+                        <p class="text-sm text-gray-600 mt-1">You can add multiple addresses for different purposes. Your
+                            default address will be automatically selected during checkout, but you can always choose a
+                            different one.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
+@section('profile_bottom')
+    <div id="modal"></div>
+@endsection
+
+@section('scripts')
+    @parent
+    <script>
+        function hideAddressModal() {
+            document.getElementById('address-modal').remove();
+        }
+        // Address management
+        {
+            % comment %
+        }
+
+        function showAddAddressModal() {
+            document.getElementById('address-modal-title').textContent = 'Add New Address';
+            document.getElementById('address-form').reset();
+            document.getElementById('address-modal').classList.remove('hidden');
+        }
+
+        function hideAddressModal() {
+            document.getElementById('address-modal').classList.add('hidden');
+        }
+
+        function editAddress(addressId) {
+            document.getElementById('address-modal-title').textContent = 'Edit Address';
+
+            // In a real app, you would populate the form with existing data
+            // For demo purposes, we'll just show the modal
+            document.getElementById('address-modal').classList.remove('hidden');
+
+            // Example of pre-filling form for editing
+            if (addressId === 'home') {
+                document.getElementById('address-nickname').value = 'Home';
+                document.getElementById('first-name').value = 'John';
+                document.getElementById('last-name').value = 'Doe';
+                document.getElementById('street-address').value = '123 Main Street';
+                document.getElementById('apartment').value = 'Apt 4B';
+                document.getElementById('city').value = 'New York';
+                document.getElementById('state').value = 'NY';
+                document.getElementById('zip-code').value = '10001';
+                document.getElementById('phone').value = '(555) 123-4567';
+                document.getElementById('set-default-address').checked = true;
+            }
+        }
+
+        // Form submission
+        document.getElementById('address-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const nickname = document.getElementById('address-nickname').value;
+            const isDefault = document.getElementById('set-default-address').checked;
+
+            if (nickname) {
+                alert(`Address "${nickname}" saved successfully!${isDefault ? ' Set as default.' : ''}`);
+                hideAddressModal();
+            }
+        });
+        {
+            % endcomment %
+        }
+    </script>
+@endsection
