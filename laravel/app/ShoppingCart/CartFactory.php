@@ -14,7 +14,7 @@ final class Cartfactory
     public function getDriver(): CanShop
     {
         if ($this->app['request']->user()) {
-            return new DatabaseCart($this->app['request']->user());
+            return new DatabaseCart($this->app['request']->user(), $this->app['session']);
         }
 
         return new SessionCart($this->app['session']);

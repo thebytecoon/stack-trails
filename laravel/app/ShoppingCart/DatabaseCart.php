@@ -7,24 +7,44 @@ use App\Models\Cart;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Support\Collection;
+use Illuminate\Session\SessionManager;
 
 final class DatabaseCart implements CanShop
 {
     use HasDefaultCart;
 
-    public function __construct(protected User $user)
+    public function __construct(protected User $user, protected SessionManager $session)
     {
+        if ($this->session->has('cart')) {
+            $carts = $this->session->get('cart', collect());
+
+            $carts->each(function ($cart) {
+                $this->addItem(
+                    $cart->product_id,
+                    $cart->quantity,
+                    $cart->color_id,
+                    $cart->storage_id
+                );
+            });
+
+            $this->session->forget('cart');
+        }
     }
 
     public function addItem(int $product_id, ?int $quantity, ?int $color_id, ?int $storage_id): void
     {
         $product = Product::where('id', $product_id)
             ->whereIsPurchasable()
-            ->firstOrFail();
+            ->first();
+
+        if (!$product) {
+            return;
+        }
 
         $cart_defauls = $this->getDefaultCart($quantity, $color_id, $storage_id);
 
-        $cart = Cart::firstOrCreate([
+        $cart = Cart::firstOrCreate(
+            [
                 'user_id' => $this->user->id,
                 'product_id' => $product->id,
                 'color_id' => $cart_defauls['color_id'],
@@ -36,7 +56,13 @@ final class DatabaseCart implements CanShop
         );
 
         if (!$cart->wasRecentlyCreated) {
-            $cart->increment('quantity', $quantity ?? 1);
+            $max_addable_quantity = abs($product->stock - $cart_defauls['quantity']);
+
+            if ($cart_defauls['quantity'] > $max_addable_quantity) {
+                $cart_defauls['quantity'] = $max_addable_quantity;
+            }
+
+            $cart->increment('quantity', $cart_defauls['quantity']);
         }
     }
 
@@ -45,7 +71,11 @@ final class DatabaseCart implements CanShop
     {
         $product = Product::where('id', $product_id)
             ->whereIsPurchasable()
-            ->firstOrFail();
+            ->first();
+
+        if (!$product) {
+            return;
+        }
 
         $cart_defauls = $this->getDefaultCart($quantity, $color_id, $storage_id);
 

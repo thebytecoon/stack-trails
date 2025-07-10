@@ -16,7 +16,6 @@ interface CanShop
      * @param int|null $color_id
      * @param int|null $storage_id
      * @return void
-     * @throws ModelNotFoundException
      */
     public function addItem(int $product_id, ?int $quantity, ?int $color_id, ?int $storage_id): void;
 
@@ -28,7 +27,6 @@ interface CanShop
      * @param int|null $color_id
      * @param int|null $storage_id
      * @return void
-     * @throws ModelNotFoundException
      */
     public function removeItem(int $product_id, ?int $quantity, ?int $color_id, ?int $storage_id): void;
 

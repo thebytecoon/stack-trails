@@ -5,13 +5,14 @@ namespace App\ShoppingCart;
 use App\Contracts\CanShop;
 use App\Models\Cart;
 use App\Models\Product;
+use Illuminate\Session\SessionManager;
 use Illuminate\Support\Collection;
 
 final class SessionCart implements CanShop
 {
     use HasDefaultCart;
 
-    public function __construct(protected $session)
+    public function __construct(protected SessionManager $session)
     {
         if (!$this->session->has('cart')) {
             $this->session->put('cart', collect());
@@ -33,7 +34,13 @@ final class SessionCart implements CanShop
         });
 
         if ($cart) {
-            $cart['quantity'] += $quantity ?? 1;
+            $max_addedable_quantity = abs($product->stock - $cart->quantity);
+
+            if ($cart_defaults['quantity'] > $max_addedable_quantity) {
+                $cart_defaults['quantity'] = $max_addedable_quantity;
+            }
+
+            $cart->quantity += $cart_defaults['quantity'];
         } else {
             $cart = new Cart([
                 'product_id' => $product->id,

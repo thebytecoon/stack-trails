@@ -56,7 +56,7 @@
 
     <div class="flex space-x-4 mb-8">
         <button 
-            hx-post="{% url 'carts.add' product.id %}"
+            hx-post="{{ route('carts.add', [$product->id]) }}"
             hx-vals='{"display": "cart", "color": {{ $selected_color }}, "storage": {{ $selected_storage }}, "quantity": {{ $quantity }} }'
             class="disabled:border-gray-200 disabled:bg-gray-100 disabled:text-gray-500 flex-1 bg-store-blue text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium"
             @if (!$can_add_to_cart) disabled @endif

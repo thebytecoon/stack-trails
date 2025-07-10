@@ -76,7 +76,7 @@
             <div class="space-y-4">
                 <div class="flex justify-between text-sm">
                     <span>Subtotal:</span>
-                    <span>${{ '0' }}</span>
+                    <span>${{ $carts->sum('total_price') }}</span>
                 </div>
                 <div class="flex justify-between text-sm">
                     <span>Shipping:</span>
@@ -85,7 +85,7 @@
                 <div class="border-t border-gray-200 pt-4">
                     <div class="flex justify-between font-bold text-lg">
                         <span>Total:</span>
-                        <span class="text-store-blue">${{ '0' }}</span>
+                        <span class="text-store-blue">${{ $carts->sum('total_price') }}</span>
                     </div>
                 </div>
                 <a href="{% url 'carts.index' %}" class="w-full bg-store-blue text-white py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium inline-block text-center" href="/checkout">
