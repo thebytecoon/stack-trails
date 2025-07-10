@@ -44,6 +44,7 @@
 @endsection
 
 @section('scripts')
+@parent
 <script>
 function clearAllFilters() {
     const form = document.getElementById('filter-form');

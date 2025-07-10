@@ -12,9 +12,11 @@ class ProductsController extends Controller
     public function index(Request $request)
     {
         $query = Product::query()
+            ->whereIsSearchable()
             ->when($request->has('categories'), function ($query) use ($request) {
                 $query->whereIn('category_id', $request->input('categories'));
-            });
+            })
+            ->orderByDesc('id');
 
 
         $products = $query->paginate(15);

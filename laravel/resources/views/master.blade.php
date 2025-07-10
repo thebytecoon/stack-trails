@@ -63,7 +63,7 @@
 
             async function searchProducts(query) {
                 try {
-                    const response = await fetch(`{% url 'api.products.search' %}?q=${encodeURIComponent(query)}`);
+                    const response = await fetch(`{{ route('api.products.search') }}?q=${encodeURIComponent(query)}`);
                     
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
