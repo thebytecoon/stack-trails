@@ -54,4 +54,12 @@ class Order extends Model
 
         return $order_item;
     }
+
+    public function addShipping(ShippingOption $shipping) : void
+    {
+        $this->shipping_option_id = $shipping->id;
+        $this->delivery_price = $shipping->price;
+        $this->total = $this->subtotal + $this->delivery_price;
+        $this->save();
+    }
 }

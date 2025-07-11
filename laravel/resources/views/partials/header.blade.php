@@ -4,7 +4,7 @@
         <div class="flex justify-between items-center h-16">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
-                    <a href="/">
+                    <a href="{{ route('home') }}">
                     <h1 class="text-2xl font-bold text-store-dark">TechStore</h1>
                     </a>
                 </div>
@@ -57,17 +57,6 @@
                         </div>
                     </div>
                 </div>
-
-                {{-- <button id="cart-button" onclick="toggleCart()" class="p-2 rounded-full hover:bg-gray-100 relative">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13h10m0 0v6a1 1 0 01-1 1H8a1 1 0 01-1-1v-6m8 0V9a1 1 0 00-1-1H8a1 1 0 00-1 1v4.01"></path>
-                    </svg>
-                    @if ($carts->count() > 0)
-                        <span id="cart-count" class="absolute -top-1 -right-1 bg-store-blue text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                            {{ $carts->count() }}
-                        </span>
-                    @endif
-                </button> --}}
                 @include('carts.partials.cart_icon')
                 @auth
                     <div class="relative">
@@ -78,8 +67,8 @@
                         <div id="user-menu" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg hidden">
                             <a href="" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
                             <a href="{{ route('user.orders.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Orders</a>
-                            <a href="{% url 'user.addresses.index' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Addresses</a>
-                            <a href="{% url 'user.payment-methods.index' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Payment Options</a>
+                            <a href="{{ route('user.addresses.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Addresses</a>
+                            <a href="{{ route('user.payment-methods.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Payment Options</a>
                             <a href="{{ route('logout') }}" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50">Logout</a>
                         </div>
                     <script>

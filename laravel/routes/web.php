@@ -57,8 +57,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/', CheckoutController::class)
             ->name('checkout.store');
 
-        Route::get('order/{order_id}', OrdersController::class)
+        Route::get('order/{order_id}', [OrdersController::class, 'show'])
             ->name('orders.show');
+
+        Route::patch('order/{order_id}', [OrdersController::class, 'update'])
+            ->name('orders.update');
 
         Route::get('{order_id}/pay', PaymentController::class)
             ->name('payment.store');

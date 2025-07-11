@@ -14,6 +14,7 @@ return new class () extends Migration {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('shipping_option_id')->nullable();
             $table->decimal('total', 10, 2)->default(0);
             $table->decimal('subtotal', 10, 2)->default(0);
             $table->decimal('delivery_price', 10, 2)->default(0);
@@ -30,6 +31,7 @@ return new class () extends Migration {
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('shipping_option_id')->references('id')->on('shipping_options')->onDelete('set null');
         });
     }
 

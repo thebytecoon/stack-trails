@@ -11,9 +11,9 @@ enum OrderStatusEnum: string
     public function getLabel(): string
     {
         return match ($this) {
-            self::INITIAL => "Inicial",
-            self::PAID => "Pagada",
-            self::CANCELLED => "Cancelada",
+            self::INITIAL => "Initial",
+            self::PAID => "Paid",
+            self::CANCELLED => "Cancelled",
         };
     }
 }
