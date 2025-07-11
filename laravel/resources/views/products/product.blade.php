@@ -14,7 +14,7 @@
                 hx-post="{{ route('carts.add', [$product->id]) }}"
                 hx-target="#cart-offcanvas"
                 hx-swap="outerHTML"
-                hx-vals='{"display": "product_list"}'
+                hx-vals='{"display": "offcanvas"}'
                 class="bg-store-dark text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors">
                 Add to Cart
             </button>

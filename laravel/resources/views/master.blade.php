@@ -35,21 +35,7 @@
 <body class="bg-white text-gray-900" hx-headers='{"X-CSRF-TOKEN": "{{ csrf_token() }}"}'>
     @include('partials.header')
 
-    {{-- @if ($messages)
-        @foreach($messages as $message)
-            <div class="p-4 mb-4 rounded-lg text-center
-                {% if message.tags == "error" %}
-                bg-red-50 dark:bg-gray-800 dark:text-red-400 text-red-800 border-red-300 dark:border-red-800
-                {% else %}
-                text-green-800 border border-green-300 bg-green-50 dark:bg-gray-800 dark:text-green-400 dark:border-green-800
-                {% endif %}" 
-            role="alert">
-            <div>
-                {{ $message }}
-            </div>
-            </div>
-        @endforeach
-    @endif --}}
+    @include('partials.messages')
 
     @yield('content')
 

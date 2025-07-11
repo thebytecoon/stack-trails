@@ -32,7 +32,7 @@
                 </div>
             </div>
 
-            <form action="{% url 'checkout.store' %}" method="post">
+            <form action="{{ route('checkout.store') }}" method="post">
                 @csrf
                 <button type="submit"
                         class="text-center inline-block w-full bg-store-blue text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors mt-6">

@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\UserOrdersController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\ProductSearchController;
@@ -32,19 +34,30 @@ Route::post('carts/sub/{product_id}', [CartController::class, 'sub'])
 Route::delete('carts/{product_id}', [CartController::class, 'destroy'])
     ->name('carts.destroy');
 
-Route::group(['middleware' => 'auth', 'prefix' => 'user'], function () {
-    Route::resource('orders', UserOrdersController::class)
-        ->names('user.orders')
-        ->only(['index', 'show']);
+Route::group(['middleware' => 'auth'], function () {
+    Route::group(['prefix' => 'user'], function () {
+        Route::resource('orders', UserOrdersController::class)
+            ->names('user.orders')
+            ->only(['index', 'show']);
 
-    Route::resource('addresses', UserAddressesController::class)
-        ->names('user.addresses')
-        ->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
-    
-    Route::patch('addresses/{id}/set-default', [UserAddressesController::class, 'setDefault'])
-        ->name('user.addresses.set_default');
+        Route::resource('addresses', UserAddressesController::class)
+            ->names('user.addresses')
+            ->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
 
-    Route::resource('payment-methods', UserPaymentMethodsController::class)
-        ->names('user.payment-methods')
-        ->only(['index']);
+        Route::patch('addresses/{id}/set-default', [UserAddressesController::class, 'setDefault'])
+            ->name('user.addresses.set_default');
+
+        Route::resource('payment-methods', UserPaymentMethodsController::class)
+            ->names('user.payment-methods')
+            ->only(['index']);
+    });
+
+    Route::group(['prefix' => 'checkout'], function () {
+        Route::post('/', CheckoutController::class)
+            ->name('checkout.store');
+
+        Route::get('order/{order_id}', OrdersController::class)
+            ->name('orders.show');
+    });
+
 });

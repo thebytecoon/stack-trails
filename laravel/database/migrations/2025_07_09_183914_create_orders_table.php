@@ -14,19 +14,19 @@ return new class () extends Migration {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->decimal('total', 10, 2);
-            $table->decimal('subtotal', 10, 2);
-            $table->decimal('delivery_price', 10, 2);
+            $table->decimal('total', 10, 2)->default(0);
+            $table->decimal('subtotal', 10, 2)->default(0);
+            $table->decimal('delivery_price', 10, 2)->default(0);
             $table->string('status')->default(OrderStatusEnum::INITIAL->value);
-            $table->string('code');
-            $table->string('payment_type');
-            $table->string('names');
-            $table->string('country');
-            $table->string('city');
-            $table->string('address_1');
-            $table->string('address_2');
-            $table->string('zip_code');
-            $table->string('phone');
+            $table->uuid('uuid')->unique();
+            $table->string('payment_type')->nullable();
+            $table->string('names')->nullable();
+            $table->string('country')->nullable();
+            $table->string('city')->nullable();
+            $table->string('address_1')->nullable();
+            $table->string('address_2')->nullable();
+            $table->string('zip_code')->nullable();
+            $table->string('phone')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

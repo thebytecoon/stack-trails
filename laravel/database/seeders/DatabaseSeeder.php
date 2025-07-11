@@ -35,7 +35,7 @@ class DatabaseSeeder extends Seeder
         "electronics",
         "clothing",
         "books",
-        "home_appliances",
+        "home appliances",
         "toys",
         "sports",
         "health",
