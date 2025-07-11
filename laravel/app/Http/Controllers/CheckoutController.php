@@ -14,6 +14,10 @@ class CheckoutController extends Controller
 
         try {
             $order = $action->handle($user, $carts->getItems());
+        } catch (\InvalidArgumentException $e) {
+            return redirect()
+                ->back()
+                ->with('error', $e->getMessage());
         } catch (\Throwable $th) {
             return redirect()
                 ->back()

@@ -5,6 +5,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OrdersController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\UserOrdersController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\ProductSearchController;
@@ -58,6 +59,9 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('order/{order_id}', OrdersController::class)
             ->name('orders.show');
+
+        Route::get('{order_id}/pay', PaymentController::class)
+            ->name('payment.store');
     });
 
 });

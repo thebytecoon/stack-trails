@@ -4,13 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class OrdersController extends Controller
+class PaymentController extends Controller
 {
     public function __invoke(string $uuid, Request $request)
     {
         $user = $request->user();
 
-        $order = $user->orders()
+        $order = $user->orders()->with([
+                'items.product',
+                'items.color',
+                'items.storage',
+            ])
             ->where('uuid', $uuid)
             ->firstOrFail();
 

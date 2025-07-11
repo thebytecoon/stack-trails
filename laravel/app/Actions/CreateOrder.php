@@ -11,6 +11,10 @@ final class CreateOrder
 {
     public function handle(User $user, Collection $carts): Order
     {
+        if ($carts->isEmpty()) {
+            throw new \InvalidArgumentException('You cannot create an order with an empty cart.');
+        }
+
         DB::beginTransaction();
 
         try {
