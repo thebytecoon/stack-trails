@@ -63,5 +63,4 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('{order_id}/pay', PaymentController::class)
             ->name('payment.store');
     });
-
 });

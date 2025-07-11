@@ -15,12 +15,30 @@ class UserOrdersController extends Controller
         $user = $this->request->user();
 
         $orders = $user->orders()->with([
-            'item',
-            'item.product'
-        ])->paginate(6);
+            'items',
+            'items.product'
+        ])
+        ->whereIsPaid()
+        ->paginate(6);
 
         return view('user_profile.orders.index', [
             'orders' => $orders,
+        ]);
+    }
+
+    public function show($uuid)
+    {
+        $user = $this->request->user();
+
+        $order = $user->orders()->with([
+            'items',
+            'items.product'
+        ])->where('uuid', $uuid)
+        ->whereIsPaid()
+        ->firstOrFail();
+
+        return view('user_profile.orders.show', [
+            'order' => $order,
         ]);
     }
 }

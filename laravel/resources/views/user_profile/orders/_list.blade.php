@@ -21,7 +21,7 @@
                     </div>
                 </div>
                 <div class="flex space-x-2">
-                    <a href="{{ route('user.orders.show', [$order->code]) }}"
+                    <a href="{{ route('user.orders.show', [$order->uuid]) }}"
                         class="text-sm text-store-blue hover:text-blue-700">
                         View order details
                     </a>
@@ -40,7 +40,7 @@
                             <h3 class="font-medium text-gray-900">{{ $item->product->name }}</h3>
                             <p class="text-sm text-gray-600">Natural Titanium, 256GB</p>
                             <p class="text-sm text-green-600 font-medium mt-1">Delivered
-                                {{ $order->created_at_ > format('M d, Y') }}</p>
+                                {{ $order->created_at->format('M d, Y') }}</p>
                             <div class="flex space-x-4 mt-2">
                                 <button class="text-sm text-store-blue hover:text-blue-700">Buy it again</button>
                                 <button class="text-sm text-store-blue hover:text-blue-700">View your item</button>

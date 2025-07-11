@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\OrderStatusEnum;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
@@ -24,6 +26,16 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 
+    public function scopeWhereIsPaid(Builder $query): Builder
+    {
+        return $query->whereStatus(OrderStatusEnum::PAID);
+    }
+
+    public function scopeWhereStatus(Builder $query, OrderStatusEnum $status): Builder
+    {
+        return $query->where('status', $status->value);
+    }
+
     public function addItem(Cart $item): OrderItem
     {
         $order_item = OrderItem::create([
@@ -37,6 +49,7 @@ class Order extends Model
         ]);
 
         $this->subtotal += $order_item->total_price;
+        $this->total = $this->subtotal + $this->delivery_price;
         $this->save();
 
         return $order_item;
