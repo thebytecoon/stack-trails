@@ -43,6 +43,23 @@ final class DatabaseCart implements CanShop
 
         $cart_defauls = $this->getDefaultCart($quantity, $color_id, $storage_id);
 
+        if ($cart_defauls['quantity'] > $product->stock) {
+            return;
+        }
+
+        $same_added_products = $this->getByProduct($product->id);
+
+        if (!$same_added_products->isEmpty()) {
+            $current_used_stock = $same_added_products->sum('quantity');
+            $expected_used_stock = $current_used_stock + $cart_defauls['quantity'];
+
+            if ($current_used_stock == $product->stock) {
+                return;
+            } elseif ($product->stock > $current_used_stock && $product->stock < $expected_used_stock) {
+                $cart_defauls['quantity'] = $product->stock - $current_used_stock;
+            }
+        }
+
         $cart = Cart::firstOrCreate(
             [
                 'user_id' => $this->user->id,
@@ -51,17 +68,11 @@ final class DatabaseCart implements CanShop
                 'storage_id' => $cart_defauls['storage_id'],
             ],
             [
-                'quantity' => $quantity ?? 1,
+                'quantity' => $cart_defauls['quantity']
             ]
         );
 
         if (!$cart->wasRecentlyCreated) {
-            $max_addable_quantity = abs($product->stock - $cart_defauls['quantity']);
-
-            if ($cart_defauls['quantity'] > $max_addable_quantity) {
-                $cart_defauls['quantity'] = $max_addable_quantity;
-            }
-
             $cart->increment('quantity', $cart_defauls['quantity']);
         }
     }
@@ -126,5 +137,12 @@ final class DatabaseCart implements CanShop
     public function clearCart(): void
     {
         Cart::where('user_id', $this->user->id)->delete();
+    }
+
+    protected function getByProduct(int $product_id): Collection
+    {
+        return Cart::where('user_id', $this->user->id)
+            ->where('product_id', $product_id)
+            ->get();
     }
 }

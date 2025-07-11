@@ -47,8 +47,19 @@
                             @foreach ($shipping_addresses as $address)
                                 <label for="id_address_{{ $address->id }}"
                                     class="flex items-center border border-gray-200 rounded-lg p-4 mb-4">
-                                    <input type="radio" name="address" value="{{ $address->id }}"
-                                        id="id_address_{{ $address->id }}" required="">
+                                    <input 
+                                        type="radio"
+                                        name="address"
+                                        value="{{ $address->id }}"
+                                        id="id_address_{{ $address->id }}" 
+                                        required=""
+                                        @if ($address->default && !old('address'))
+                                        checked
+                                        @endif
+                                        @if (old('address') == $address->id)
+                                        checked
+                                        @endif
+                                    >
                                     <div class="ml-3 flex-1">
                                         <div class="flex justify-between">
                                             <span class="font-medium text-gray-900">{{ $address->name }}</span>
@@ -73,7 +84,10 @@
                                         hx-patch="{{ route('orders.update', [$order->uuid]) }}"
                                         hx-target="#checkout-order-summary"
                                         hx-trigger="click" 
-                                        required="true"
+
+                                        @if (old('shipping_option') == $option->id)
+                                        checked
+                                        @endif
                                     >
                                     <div class="ml-3 flex-1">
                                         <div class="flex justify-between">
@@ -98,8 +112,14 @@
                             class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-revolut-blue focus:border-transparent mb-4"
                             id="id_payment_method">
                             @foreach ($payment_methods as $payment_method)
-                                <option value="{{ $payment_method->id }}">{{ $payment_method->type }} ending ••••
-                                    {{ $payment_method->shortNumber() }}</option>
+                                <option 
+                                    value="{{ $payment_method->id }}"
+                                    @if (old('payment_method') == $payment_method->id)
+                                    selected 
+                                    @endif
+                                >
+                                    {{ $payment_method->type }} ending •••• {{ $payment_method->shortNumber() }}
+                                </option>
                             @endforeach
                         </select>
                     </div>

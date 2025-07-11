@@ -63,7 +63,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::patch('order/{order_id}', [OrdersController::class, 'update'])
             ->name('orders.update');
 
-        Route::get('{order_id}/pay', PaymentController::class)
+        Route::post('{order_id}/pay', PaymentController::class)
             ->name('payment.store');
     });
 });
