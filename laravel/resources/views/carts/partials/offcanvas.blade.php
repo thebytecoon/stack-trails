@@ -88,7 +88,7 @@
                         <span class="text-store-blue">${{ $carts->sum('total_price') }}</span>
                     </div>
                 </div>
-                <a href="{% url 'carts.index' %}" class="w-full bg-store-blue text-white py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium inline-block text-center" href="/checkout">
+                <a href="{{ route('carts.index') }}" class="w-full bg-store-blue text-white py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium inline-block text-center" href="/checkout">
                     Checkout
                 </a>
                 <button onclick="toggleCart()" class="w-full border border-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-50 transition-colors">

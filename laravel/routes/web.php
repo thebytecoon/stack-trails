@@ -20,6 +20,9 @@ Route::get('products/search', ProductSearchController::class)
     ->name('api.products.search');
 Route::resource('products', ProductsController::class);
 
+Route::get('carts', [CartController::class, 'index'])
+    ->name('carts.index');
+
 Route::post('carts/add/{product_id}', [CartController::class, 'add'])
     ->name('carts.add');
 

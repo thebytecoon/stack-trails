@@ -76,7 +76,8 @@ class DatabaseSeeder extends Seeder
                 "https://images.unsplash.com/photo-1505740420928-5e560c06d30e",
                 "https://images.unsplash.com/photo-1583394838336-acd977736f90",
                 "https://images.unsplash.com/photo-1484704849700-f032a568e944",
-                "https://images.unsplash.com/photo-1628202926206-c63a34b1618f"
+                "https://images.unsplash.com/photo-1628202926206-c63a34b1618f",
+                "https://images.unsplash.com/photo-1588423771073-b8903fbb85b5",
             ],
             "features" => [
                 "High-resolution display for immersive visuals.",
