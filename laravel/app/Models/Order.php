@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\OrderStatusEnum;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class Order extends Model
@@ -55,11 +56,28 @@ class Order extends Model
         return $order_item;
     }
 
-    public function addShipping(ShippingOption $shipping) : void
+    public function addShipping(ShippingOption $shipping): void
     {
         $this->shipping_option_id = $shipping->id;
         $this->delivery_price = $shipping->price;
         $this->total = $this->subtotal + $this->delivery_price;
         $this->save();
+    }
+
+    public function shortCode(): string
+    {
+        return substr($this->uuid, 0, 8);
+    }
+
+    public function pay(): bool
+    {
+        if ($this->status != OrderStatusEnum::INITIAL->value) {
+            return false;
+        }
+
+        $this->status = OrderStatusEnum::PAID->value;
+        $result = $this->save();
+
+        return $result;
     }
 }

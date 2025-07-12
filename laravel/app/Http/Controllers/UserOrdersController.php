@@ -19,6 +19,7 @@ class UserOrdersController extends Controller
             'items.product'
         ])
         ->whereIsPaid()
+        ->orderBy('created_at', 'desc')
         ->paginate(6);
 
         return view('user_profile.orders.index', [

@@ -2,14 +2,20 @@
 
 namespace App\Actions;
 
-use App\Enums\OrderStatusEnum;
 use App\Models\Order;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use ValueError;
 
 final class PurchaseAction
 {
-    public function handle(Order $order): void
+    public function handle(Order $order, array $order_data): void
     {
+        $this->validateData($order_data);
+
+        $user = $order->user;
+        $address = $user->addresses()->findOrFail($order_data['address']);
+
         DB::beginTransaction();
 
         try {
@@ -22,6 +28,14 @@ final class PurchaseAction
                 ->lockForUpdate()
                 ->firstOrFail();
 
+            $order->names = $address->names;
+            $order->address_1 = $address->address_line_1;
+            $order->address_2 = $address->address_line_2;
+            $order->country = $address->country;
+            $order->city = $address->city;
+            $order->zip_code = $address->postal_code;
+            $order->phone = $address->phone_number;
+
             $items = $order->items;
 
             foreach ($items->groupBy('product_id') as $group_items) {
@@ -30,7 +44,7 @@ final class PurchaseAction
                 $product = $group_items->first()->product;
 
                 if ($product->stock < $used_stock) {
-                    throw new \Exception('Not enough stock for product: ' . $product->name);
+                    throw new ValueError('Not enough stock for product: ' . $product->name);
                 }
             }
 
@@ -40,8 +54,7 @@ final class PurchaseAction
                 $product->decrement('stock', $item->quantity);
             }
 
-            $order->status = OrderStatusEnum::PAID;
-            $order->save();
+            $order->pay();
         } catch (\Throwable $th) {
             DB::rollBack();
 
@@ -51,5 +64,22 @@ final class PurchaseAction
         }
 
         DB::commit();
+    }
+
+    protected function validateData(array $data): void
+    {
+        Validator::make(
+            $data,
+            $this->rules()
+        )->validate();
+    }
+
+    public function rules(): array
+    {
+        return [
+            'shipping_option' => 'required|exists:shipping_options,id',
+            'address' => 'required',
+            'payment_method' => 'required',
+        ];
     }
 }

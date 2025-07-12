@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Actions\PurchaseAction;
 use App\Contracts\CanShop;
-use App\Http\Requests\PaymentRequest;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
+use Throwable;
+use ValueError;
 
 class PaymentController extends Controller
 {
@@ -16,16 +17,6 @@ class PaymentController extends Controller
         PurchaseAction $action,
         CanShop $cart
     ) {
-        $validator = Validator::make(
-            $request->all(),
-            $this->rules()
-        );
-
-        if ($validator->fails()) {
-            return redirect()->back()->withInput()
-                ->with('error', $validator->messages()->all());
-        }
-
         $user = $request->user();
 
         $order = $user->orders()
@@ -33,8 +24,14 @@ class PaymentController extends Controller
             ->firstOrFail();
 
         try {
-            $action->handle($order);
-        } catch (\Throwable $th) {
+            $action->handle($order, $request->all());
+        } catch (ValidationException $e) {
+            return redirect()->back()->withInput()
+                ->with('error', $e->validator->messages()->all());
+        } catch (ValueError $e) {
+            return redirect()->back()->withInput()
+                ->with('error', $e->getMessage());
+        } catch (Throwable $th) {
             return redirect()->back()->withInput()
                 ->with(
                     'error',
@@ -47,14 +44,5 @@ class PaymentController extends Controller
         return view('checkout.thanks', [
             'order' => $order,
         ]);
-    }
-
-    protected function rules() : array
-    {
-        return [
-            'shipping_option' => 'required|exists:shipping_options,id',
-            'address' => 'required',
-            'payment_method' => 'required',
-        ];
     }
 }

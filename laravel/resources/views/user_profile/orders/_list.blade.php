@@ -1,4 +1,4 @@
-<div id="user-orders-list" @if (isset($htmx) && $htmx) hx-swap-oob="true" @endif class="divide-y divide-gray-200">
+<div id="user-orders-list" hx-swap-oob="true" class="divide-y divide-gray-200">
     @foreach ($orders as $order)
         <div class="p-6">
             <div class="flex justify-between items-start mb-4">
@@ -13,11 +13,11 @@
                     </div>
                     <div>
                         <p class="font-medium text-gray-900">SHIP TO</p>
-                        <p class="text-gray-600">John Doe</p>
+                        <p class="text-gray-600">{{ $order->names }}</p>
                     </div>
                     <div>
                         <p class="font-medium text-gray-900">ORDER #</p>
-                        <p class="text-store-blue">{{ $order->short_code }}</p>
+                        <p class="text-store-blue">{{ $order->shortCode() }}</p>
                     </div>
                 </div>
                 <div class="flex space-x-2">
