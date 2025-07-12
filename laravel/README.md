@@ -4,7 +4,7 @@ Missing features:
 
 - [ ] Reviews and comments.
 - [ ] Some static sections like support, categories, about, etc...
-- [ ] Related products.
+- [x] Related products.
 - [ ] Wishlist.
 - [ ] User avatar.
 - [ ] Fix some elements for the order details page.
