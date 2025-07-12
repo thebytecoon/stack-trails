@@ -28,6 +28,9 @@ return new class () extends Migration {
             $table->string('address_2')->nullable();
             $table->string('zip_code')->nullable();
             $table->string('phone')->nullable();
+            $table->timestamp('processed_at')->nullable();
+            $table->timestamp('shipped_at')->nullable();
+            $table->timestamp('delivered_at')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

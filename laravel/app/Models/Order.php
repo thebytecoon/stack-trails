@@ -5,11 +5,17 @@ namespace App\Models;
 use App\Enums\OrderStatusEnum;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class Order extends Model
 {
+    protected $casts = [
+        'status' => OrderStatusEnum::class,
+        'processed_at' => 'datetime',
+        'shipped_at' => 'datetime',
+        'delivered_at' => 'datetime',
+    ];
+
     public static function booted(): void
     {
         static::creating(function (Order $model) {
@@ -71,11 +77,14 @@ class Order extends Model
 
     public function pay(): bool
     {
-        if ($this->status != OrderStatusEnum::INITIAL->value) {
+        if ($this->status != OrderStatusEnum::INITIAL) {
             return false;
         }
 
-        $this->status = OrderStatusEnum::PAID->value;
+        $this->status = OrderStatusEnum::PAID;
+        $this->processed_at = now();
+        $this->shipped_at = now();
+        $this->delivered_at = now();
         $result = $this->save();
 
         return $result;
