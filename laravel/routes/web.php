@@ -48,9 +48,12 @@ Route::group(['middleware' => 'auth'], function () {
         Route::patch('addresses/{id}/set-default', [UserAddressesController::class, 'setDefault'])
             ->name('user.addresses.set_default');
 
+        Route::patch('payment-methods/{id}/default', [UserPaymentMethodsController::class, 'default'])
+            ->name('user.payment-methods.default');
+
         Route::resource('payment-methods', UserPaymentMethodsController::class)
             ->names('user.payment-methods')
-            ->only(['index']);
+            ->only(['index', 'create', 'store', 'destroy']);
     });
 
     Route::group(['prefix' => 'checkout'], function () {

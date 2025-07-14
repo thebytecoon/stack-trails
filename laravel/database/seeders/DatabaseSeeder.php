@@ -227,7 +227,7 @@ class DatabaseSeeder extends Seeder
 
             $this->command->info("Creating payment methods...");
             $user->payment_methods()->create([
-                "type" => "Visa",
+                "type" => "visa",
                 "card_number" => "4387",
                 "cardholder_name" => "John Doe",
                 "expiry_date" => "2026-12-31",
