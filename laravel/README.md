@@ -8,3 +8,5 @@ Missing features:
 - [ ] Wishlist.
 - [ ] User avatar.
 - [ ] Fix some elements for the order details page.
+- [ ] Add or edit addresses.
+- [ ] Add payment methods.
