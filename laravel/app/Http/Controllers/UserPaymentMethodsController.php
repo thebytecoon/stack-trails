@@ -33,9 +33,9 @@ class UserPaymentMethodsController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store()
     {
-        $validator = Validator::make($request->all(), $this->rules());
+        $validator = Validator::make($this->request->all(), $this->rules());
 
         if ($validator->fails()) {
             $this->request->session()->flashInput($this->request->input());
