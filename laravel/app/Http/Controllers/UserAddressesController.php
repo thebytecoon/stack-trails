@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Address;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\HtmlString;
 
 class UserAddressesController extends Controller
 {
@@ -24,12 +27,10 @@ class UserAddressesController extends Controller
 
     public function create()
     {
-        $user = $this->request->user();
-        $form_action = route('user.addresses.store');
+        $model = $this->request->user()->addresses()->make();
 
         return view('user_profile.addresses.create', [
-            'user' => $user,
-            'form_action' => $form_action,
+            'model' => $model,
         ]);
     }
 
@@ -37,18 +38,26 @@ class UserAddressesController extends Controller
     {
         $user = $this->request->user();
 
-        $data = $this->request->validate([
-            'name' => 'required|string|max:255',
-            'address' => 'required|string|max:255',
-            'city' => 'required|string|max:100',
-            'state' => 'required|string|max:100',
-            'zip' => 'required|string|max:20',
-        ]);
+        $validator = Validator::make($this->request->all(), $this->rules());
 
-        $user->addresses()->create($data);
+        if ($validator->fails()) {
+            $this->request->session()->flashInput($this->request->input());
 
-        return redirect()->route('user.addresses.index')
-            ->with('success', 'Address added successfully.');
+            $model = $this->request->user()->addresses()->make();
+
+            return view('user_profile.addresses._form', [
+                'errors' => $validator->errors(),
+                'model' => $model,
+            ]);
+        }
+
+        $validated = $validator->validated();
+
+        $user->addresses()->create($validated);
+
+        return new HtmlString("<div>
+            Thank you! Your address has been created successfully.
+        </div>");
     }
 
     public function edit($id)
@@ -57,11 +66,8 @@ class UserAddressesController extends Controller
 
         $address = $user->addresses()->findOrFail($id);
 
-        $form_action = route('user.addresses.update', [$address->id]);
-
         return view('user_profile.addresses.edit', [
-            'user' => $user,
-            'form_action' => $form_action,
+            'model' => $address,
         ]);
     }
 
@@ -69,19 +75,26 @@ class UserAddressesController extends Controller
     {
         $user = $this->request->user();
 
-        $data = $this->request->validate([
-            'name' => 'required|string|max:255',
-            'address' => 'required|string|max:255',
-            'city' => 'required|string|max:100',
-            'state' => 'required|string|max:100',
-            'zip' => 'required|string|max:20',
-        ]);
-
         $address = $user->addresses()->findOrFail($id);
-        $address->update($data);
 
-        return redirect()->route('user.addresses.index')
-            ->with('success', 'Address updated successfully.');
+        $validator = Validator::make($this->request->all(), $this->rules());
+
+        if ($validator->fails()) {
+            $this->request->session()->flashInput($this->request->input());
+
+            return view('user_profile.addresses._form', [
+                'errors' => $validator->errors(),
+                'model' => $address,
+            ]);
+        }
+
+        $validated = $validator->validated();
+
+        $address->update($validated);
+
+        return new HtmlString("<div>
+            Thank you! Your address has been updated successfully.
+        </div>");
     }
 
     public function setDefault($id)
@@ -115,5 +128,20 @@ class UserAddressesController extends Controller
         return view('user_profile.addresses._list', [
             'addresses' => $addresses,
         ]);
+    }
+
+    protected function rules() : array
+    {
+        return [
+            'name' => 'required|string|max:255',
+            'names' => 'required|string|max:255',
+            'address_line_1' => 'required|string|max:255',
+            'address_line_2' => 'nullable|string|max:255',
+            'city' => 'required|string|max:100',
+            'country' => 'required|string|max:100',
+            'postal_code' => 'required|string|max:20',
+            'phone_number' => 'required|string|max:20',
+            'default' => 'boolean',
+        ];
     }
 }
