@@ -105,6 +105,9 @@ class ProductsController extends Controller
             ->take(4)
             ->get();
 
+        $review_avg = $product->reviews()
+            ->avg('rating');
+
         return view('products.show', [
             'product' => $product,
             'available_colors' => $available_colors,
@@ -114,6 +117,7 @@ class ProductsController extends Controller
             'quantity' => $quantity,
             'can_add_to_cart' => $can_add_to_cart,
             'related_products' => $related_products,
+            'review_avg' => $review_avg,
         ]);
     }
 
