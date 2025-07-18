@@ -37,4 +37,9 @@ class OrderItem extends Model
     {
         return $this->belongsTo(ProductStorage::class);
     }
+
+    public function review()
+    {
+        return $this->hasOne(Review::class);
+    }
 }

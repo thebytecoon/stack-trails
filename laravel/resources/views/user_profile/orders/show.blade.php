@@ -123,10 +123,27 @@
                                     <p class="text-sm text-gray-600 mb-2">{{ $order_item->color->display_name }}, {{ $order_item->storage->display_name }}</p>
                                     <p class="text-sm text-gray-600">Quantity: {{ $order_item->quantity }}</p>
                                     <div class="mt-3 flex flex-wrap gap-2">
-                                        <button onclick="showReviewModal('iphone')"
-                                            class="text-sm bg-store-blue text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                                            Write a Review
-                                        </button>
+                                        @if ($order_item->review)
+                                            <button
+                                                hx-get="{{ route('user.orders.reviews.edit', [
+                                                    $order->id,
+                                                    $order_item->id,
+                                                    $order_item->review->id,
+                                                ]) }}"
+                                                hx-target="#modal"
+                                                hx-swap="innerHTML"
+                                                class="text-sm bg-store-blue text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                                Edit a Review
+                                            </button>
+                                        @else
+                                            <button
+                                                hx-get="{{ route('user.orders.reviews.create', ['order_id' => $order->id, 'item_id' => $order_item->id]) }}"
+                                                hx-target="#modal"
+                                                hx-swap="innerHTML"
+                                                class="text-sm bg-store-blue text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                                Write a Review
+                                            </button>
+                                        @endif
                                         <a href="{% url 'products.show' $order_item->product.slug %}"
                                             class="text-sm border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors">
                                             Buy Again
@@ -272,4 +289,8 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('profile_bottom')
+    <div id="modal"></div>
 @endsection

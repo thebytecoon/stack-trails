@@ -9,7 +9,7 @@
                 <div class="flex justify-between items-center">
                     <h1 class="text-2xl font-semibold text-gray-900">Payment Options</h1>
                     <button hx-get="{{ route('user.payment-methods.create') }}" hx-target="#modal" hx-swap="innerHTML"
-                        class="bg-revolut-blue text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                        class="bg-store-blue text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
                         Add Payment Method
                     </button>
                 </div>

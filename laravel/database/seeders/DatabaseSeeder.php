@@ -2,13 +2,12 @@
 
 namespace Database\Seeders;
 
-use App\Models\Address;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Color;
-use App\Models\PaymentMethod;
 use App\Models\Product;
 use App\Models\ProductStorage;
+use App\Models\Review;
 use App\Models\ShippingOption;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -282,12 +281,21 @@ class DatabaseSeeder extends Seeder
 
                 $image = $product_info['images'][array_rand($product_info['images'])];
 
-                Product::factory()->create([
+                $product = Product::factory()->create([
                     'owner_id' => $user->id,
                     'brand_id' => $brands->random()->id,
                     'category_id' => $categories->random()->id,
                     'image' => $image,
                 ]);
+
+                $reviews = rand(0, 50);
+
+                for ($j = 0; $j < $reviews; $j++) {
+                    Review::factory()->create([
+                        'product_id' => $product->id,
+                        'user_id' => $user->id,
+                    ]);
+                }
             }
         });
     }

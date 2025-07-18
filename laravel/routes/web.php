@@ -9,6 +9,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\UserOrdersController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\ProductSearchController;
+use App\Http\Controllers\ReviewsController;
 use App\Http\Controllers\UserAddressesController;
 use App\Http\Controllers\UserPaymentMethodsController;
 use Illuminate\Support\Facades\Route;
@@ -54,6 +55,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('payment-methods', UserPaymentMethodsController::class)
             ->names('user.payment-methods')
             ->only(['index', 'create', 'store', 'destroy']);
+
+        Route::resource('orders/{order_id}/items/{item_id}/reviews', ReviewsController::class)
+            ->names('user.orders.reviews')
+            ->only(['create', 'store', 'edit', 'update']);
     });
 
     Route::group(['prefix' => 'checkout'], function () {
