@@ -61,7 +61,7 @@
                 @auth
                     <div class="relative">
                         <button id="user-menu-button" class="flex items-center space-x-2 focus:outline-none">
-                            <img src="{{ auth()->user()->avatar }}" alt="{{ auth()->user()->name }}" class="w-8 h-8 rounded-full">
+                            <img src="{{ asset('assets/avatar.png') }}" alt="{{ auth()->user()->name }}" class="w-8 h-8 rounded-full">
                             <span class="hidden md:inline-block text-sm text-gray-700">{{ auth()->user()->name }}</span>
                         </button>
                         <div id="user-menu" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg hidden">

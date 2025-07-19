@@ -6,7 +6,7 @@ Missing features:
 - [ ] Some static sections like support, categories, about, etc...
 - [x] Related products.
 - [ ] Wishlist.
-- [ ] User avatar.
+- [x] User avatar.
 - [ ] Fix some elements for the order details page.
 - [x] Add or edit addresses.
 - [x] Add payment methods.
