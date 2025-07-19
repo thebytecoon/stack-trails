@@ -2,7 +2,7 @@ This is a WIP
 
 Missing features:
 
-- [ ] Reviews and comments.
+- [x] Reviews and comments.
 - [ ] Some static sections like support, categories, about, etc...
 - [x] Related products.
 - [ ] Wishlist.

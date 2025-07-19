@@ -61,24 +61,77 @@
         <div class="mt-16">
             <div class="border-b border-gray-200">
                 <nav class="-mb-px flex space-x-8">
-                    <button class="border-b-2 border-store-blue text-store-blue py-4 px-1 text-sm font-medium">
+                    <button class="tab-button border-b-2 border-store-blue text-store-blue py-4 px-1 text-sm font-medium"
+                            data-tab="description">
                         Description
                     </button>
-                    <button
-                        class="border-b-2 border-transparent text-gray-500 hover:text-gray-700 py-4 px-1 text-sm font-medium">
+                    <button class="tab-button border-b-2 border-transparent text-gray-500 hover:text-gray-700 py-4 px-1 text-sm font-medium"
+                            data-tab="specifications">
                         Specifications
                     </button>
-                    <button
-                        class="border-b-2 border-transparent text-gray-500 hover:text-gray-700 py-4 px-1 text-sm font-medium">
+                    <button class="tab-button border-b-2 border-transparent text-gray-500 hover:text-gray-700 py-4 px-1 text-sm font-medium"
+                            data-tab="reviews">
                         Reviews ({{ $product->reviews->count() }})
                     </button>
                 </nav>
             </div>
             <div class="mt-8">
-                <div class="prose max-w-none">
-                    <p class="text-gray-600 leading-relaxed">
-                        {{ $product->description }}
-                    </p>
+                <!-- Description Tab Content -->
+                <div id="description-tab" class="tab-content">
+                    <div class="prose max-w-none">
+                        <p class="text-gray-600 leading-relaxed">
+                            {{ $product->description }}
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Specifications Tab Content -->
+                <div id="specifications-tab" class="tab-content hidden">
+                    <div class="prose max-w-none">
+                        @if($product->specifications && $product->specifications->count() > 0)
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                @foreach($product->specifications as $spec)
+                                    <div class="flex justify-between py-2 border-b border-gray-100">
+                                        <span class="font-medium text-gray-700">{{ $spec->name }}:</span>
+                                        <span class="text-gray-600">{{ $spec->value }}</span>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @else
+                            <p class="text-gray-600">No specifications available for this product.</p>
+                        @endif
+                    </div>
+                </div>
+
+                <!-- Reviews Tab Content -->
+                <div id="reviews-tab" class="tab-content hidden">
+                    <div class="space-y-6">
+                        @if($product->reviews && $product->reviews->count() > 0)
+                            @foreach($product->reviews as $review)
+                                <div class="border-b border-gray-200 pb-6">
+                                    <div class="flex items-center mb-2">
+                                        <div class="flex space-x-1 mr-3">
+                                            @for ($i = 0; $i < 5; $i++)
+                                                @if ($i < $review->rating)
+                                                    <span class="text-yellow-400">★</span>
+                                                @else
+                                                    <span class="text-gray-300">★</span>
+                                                @endif
+                                            @endfor
+                                        </div>
+                                        <span class="font-medium text-gray-900">{{ $review->user->name ?? 'Anonymous' }}</span>
+                                        <span class="text-gray-500 text-sm ml-2">{{ $review->created_at->format('M d, Y') }}</span>
+                                    </div>
+                                    @if($review->title)
+                                        <h4 class="font-medium text-gray-900 mb-2">{{ $review->title }}</h4>
+                                    @endif
+                                    <p class="text-gray-600">{{ $review->comment }}</p>
+                                </div>
+                            @endforeach
+                        @else
+                            <p class="text-gray-600">No reviews yet. Be the first to review this product!</p>
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>
@@ -93,4 +146,39 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Tab functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetTab = this.getAttribute('data-tab');
+
+                    // Remove active classes from all buttons
+                    tabButtons.forEach(btn => {
+                        btn.classList.remove('border-store-blue', 'text-store-blue');
+                        btn.classList.add('border-transparent', 'text-gray-500');
+                    });
+
+                    // Add active classes to clicked button
+                    this.classList.remove('border-transparent', 'text-gray-500');
+                    this.classList.add('border-store-blue', 'text-store-blue');
+
+                    // Hide all tab contents
+                    tabContents.forEach(content => {
+                        content.classList.add('hidden');
+                    });
+
+                    // Show target tab content
+                    const targetContent = document.getElementById(targetTab + '-tab');
+                    if (targetContent) {
+                        targetContent.classList.remove('hidden');
+                    }
+                });
+            });
+        });
+    </script>
 @endsection
