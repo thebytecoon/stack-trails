@@ -10,3 +10,4 @@ Missing features:
 - [ ] Fix some elements for the order details page.
 - [x] Add or edit addresses.
 - [x] Add payment methods.
+- [ ] Create product form.
