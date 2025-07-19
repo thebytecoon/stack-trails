@@ -11,3 +11,4 @@ Missing features:
 - [x] Add or edit addresses.
 - [x] Add payment methods.
 - [ ] Create product form.
+- [ ] Filter products by price.
