@@ -38,14 +38,12 @@
                             class="w-20 h-20 object-cover rounded-lg">
                         <div class="flex-1">
                             <h3 class="font-medium text-gray-900">{{ $item->product->name }}</h3>
-                            <p class="text-sm text-gray-600">Natural Titanium, 256GB</p>
+                            <p class="text-sm text-gray-600">{{ $item->color->display_name }}, {{ $item->storage->display_name }}</p>
                             <p class="text-sm text-green-600 font-medium mt-1">Delivered
                                 {{ $order->created_at->format('M d, Y') }}</p>
                             <div class="flex space-x-4 mt-2">
                                 <button class="text-sm text-store-blue hover:text-blue-700">Buy it again</button>
                                 <button class="text-sm text-store-blue hover:text-blue-700">View your item</button>
-                                <button class="text-sm text-store-blue hover:text-blue-700">Write a product
-                                    review</button>
                             </div>
                         </div>
                         <div class="text-right">
