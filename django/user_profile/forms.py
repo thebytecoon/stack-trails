@@ -49,3 +49,35 @@ class OrderFiltersForm(forms.Form):
             current_choices.append((year["year"], str(year["year"])))
 
         self.fields["date"].choices = current_choices
+
+
+class ReviewForm(forms.Form):
+    rating = forms.IntegerField(
+        label="Rating",
+        required=True,
+        min_value=1,
+        max_value=5,
+        widget=forms.HiddenInput(),
+    )
+    title = forms.CharField(
+        label="Title",
+        max_length=100,
+        widget=forms.TextInput(
+            attrs={
+                "class": "w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-revolut-blue focus:border-transparent",
+                "placeholder": "Review title",
+            }
+        ),
+        required=True,
+    )
+    comment = forms.CharField(
+        label="Comment",
+        widget=forms.Textarea(
+            attrs={
+                "class": "w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-revolut-blue focus:border-transparent resize-none",
+                "rows": 4,
+                "placeholder": "Write your review here...",
+            }
+        ),
+        required=False,
+    )

@@ -7,12 +7,22 @@ from user_profile.views import reviews
 
 urlpatterns = [
     path(
-        "orders/<code>/reviews/<item_id>",
+        "orders/<order_code>/reviews/<item_id>/edit/<review_id>",
+        reviews.edit,
+        name="user.orders.reviews.edit",
+    ),
+    path(
+        "orders/<order_code>/reviews/<item_id>/update/<review_id>",
+        reviews.update,
+        name="user.orders.reviews.update",
+    ),
+    path(
+        "orders/<order_code>/reviews/<item_id>",
         reviews.create,
         name="user.orders.reviews.create",
     ),
     path(
-        "orders/<code>/reviews/<item_id>/store",
+        "orders/<order_code>/reviews/<item_id>/store",
         reviews.store,
         name="user.orders.reviews.store",
     ),

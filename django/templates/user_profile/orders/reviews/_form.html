@@ -1,0 +1,64 @@
+{% csrf_token %}
+<div class="flex items-center space-x-3 mb-4">
+    <div id="review-product-icon"
+        class="bg-gray-100 rounded-lg flex items-center justify-center text-xl">
+        <img src="{{ product.image_url_sm }}"
+        alt="{{ product.name }}" class="w-full h-24 object-cover rounded-md">
+    </div>
+    <div>
+        <p id="review-product-name" class="font-semibold">{{ product.name }}</p>
+        <p class="text-sm text-gray-600">Rate your experience</p>
+    </div>
+</div>
+<!-- Star Rating -->
+<div class="mb-4">
+    <label class="block text-sm font-medium mb-2">Rating</label>
+    <div class="flex space-x-1">
+        <button type="button" onclick="setRating(1)"
+            class="star-rating text-2xl text-gray-300 hover:text-yellow-400">★</button>
+        <button type="button" onclick="setRating(2)"
+            class="star-rating text-2xl text-gray-300 hover:text-yellow-400">★</button>
+        <button type="button" onclick="setRating(3)"
+            class="star-rating text-2xl text-gray-300 hover:text-yellow-400">★</button>
+        <button type="button" onclick="setRating(4)"
+            class="star-rating text-2xl text-gray-300 hover:text-yellow-400">★</button>
+        <button type="button" onclick="setRating(5)"
+            class="star-rating text-2xl text-gray-300 hover:text-yellow-400">★</button>
+    </div>
+
+    {{ form.rating }}
+</div>
+
+<!-- Review Title -->
+<div class="mb-4">
+    {{ form.title }}
+</div>
+
+<!-- Review Text -->
+<div class="mb-6">
+    {{ form.comment }}
+</div>
+
+<div class="flex space-x-3">
+    <button class="flex-1 border border-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-50 transition-colors">
+        Cancel
+    </button>
+    <button class="flex-1 bg-store-blue text-white py-3 rounded-lg hover:bg-blue-700 transition-colors">
+        Submit Review
+    </button>
+</div>
+
+<script>
+    {% if review %}
+    setRating({{ review.rating }});
+    {% endif %}
+    function setRating(rating) {
+        const stars = document.querySelectorAll('.star-rating');
+        stars.forEach((star, index) => {
+            star.classList.toggle('text-yellow-400', index < rating);
+            star.classList.toggle('text-gray-300', index >= rating);
+        });
+
+        document.getElementById('id_rating').value = rating;
+    }
+</script>
