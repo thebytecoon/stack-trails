@@ -6,7 +6,7 @@ from django.db.models import Q
 from django.views.decorators.http import require_GET, require_POST
 import json
 from django.contrib import messages
-from django.db.models import Count, Q
+from django.db.models import Count, Q, Avg
 from colors.models import Color
 from product_storage.models import ProductStorage
 
@@ -95,7 +95,16 @@ def show(request, id):
 
     if product.stock < quantity:
         can_add_to_cart = False
-        quantity = product.stockç
+        quantity = product.stock
+
+    rating_range = range(1, 6)
+
+    avg_rating = list(product.reviews.aggregate(Avg('rating')).values())[0]
+
+    if avg_rating is not None:
+        avg_rating = round(avg_rating, 1)
+    else:
+        avg_rating = 0
 
     return render(request, "products/show.html", {
         "product": product,
@@ -105,6 +114,8 @@ def show(request, id):
         "selected_storage": selected_storage,
         "can_add_to_cart": can_add_to_cart,
         "quantity": quantity,
+        "rating_range": rating_range,
+        "avg_rating": avg_rating,
     })
 
 

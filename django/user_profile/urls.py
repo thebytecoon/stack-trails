@@ -3,8 +3,19 @@ from django.urls import path
 from user_profile.views import orders
 from user_profile.views import addresses
 from user_profile.views import payments
+from user_profile.views import reviews
 
 urlpatterns = [
+    path(
+        "orders/<code>/reviews/<item_id>",
+        reviews.create,
+        name="user.orders.reviews.create",
+    ),
+    path(
+        "orders/<code>/reviews/<item_id>/store",
+        reviews.store,
+        name="user.orders.reviews.store",
+    ),
     path("orders/<code>", orders.show, name="user.orders.show"),
     path("orders", orders.index, name="user.orders.index"),
     path("addresses", addresses.index, name="user.addresses.index"),

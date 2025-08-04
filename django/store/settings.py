@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     "addresses",
     "user_profile",
     'product_storage',
+    'reviews',
 ]
 
 MIDDLEWARE = [

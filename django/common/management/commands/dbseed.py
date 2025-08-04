@@ -266,7 +266,7 @@ class Command(BaseCommand):
                 fake.add_provider(lorem)
 
                 self.stdout.write(self.style.SUCCESS("Creating products..."))
-                for _ in range(300):
+                for _ in range(500):
                     product_type = random.choice(list(self.product_info.keys()))
                     
                     product = Product.objects.create(
@@ -287,6 +287,14 @@ class Command(BaseCommand):
 
                     for feature in self.product_info[product_type]["features"]:
                         product.features.create(description=feature)
+
+                    for _ in range(random.randint(0, 50)):
+                        product.reviews.create(
+                            user=u,
+                            rating=random.randint(1, 5),
+                            title=fake.sentence(),
+                            comment=fake.paragraph(),
+                        )
 
                 self.stdout.write(self.style.SUCCESS("Creating shipping options..."))
                 for option in self.shipping_options:
